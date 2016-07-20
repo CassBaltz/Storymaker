@@ -7,10 +7,13 @@ const Route = ReactRouter.Route;
 const IndexRoute = ReactRouter.IndexRoute;
 const hashHistory = ReactRouter.hashHistory;
 
+// testing
+const IIStore = require('./stores/image_items_store');
+
 const App = require('./components/app');
 const HomeScreen = require('./components/home_screen');
-const StoryIndex = require('./components/story_create');
-const StoryCreate = require('./components/story_index');
+const StoryCreate = require('./components/story_create');
+const StoryIndex = require('./components/story_index');
 
 const appRouter = (
   <Router history={ hashHistory }>
@@ -26,3 +29,5 @@ document.addEventListener('DOMContentLoaded', function(){
   const root = document.getElementById('content');
   ReactDOM.render(appRouter, root);
 });
+
+window.IIStore = IIStore;
