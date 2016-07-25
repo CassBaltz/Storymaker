@@ -20,7 +20,7 @@
     "react-modal": "^1.4.0",
     "react-router": "^2.5.1",
     "gifshot": "^0.3.2",
-    "webpack": "^1.13.1",
+    "webpack": "^1.13.1"
   },
   "devDependencies": {},
   "scripts": {
