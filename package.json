@@ -1,0 +1,31 @@
+{
+  "name": "Storymaker-master",
+  "version": "1.0.0",
+  "description": "== README",
+  "main": "webpack.config.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "gifshot": "^0.3.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "postinstall": "./node_modules/.bin/webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CassBaltz/Storymaker.git"
+  },
+  "engines": {
+  "node": "6.1.0",
+  "npm": "3.8.6"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CassBaltz/Storymaker/issues"
+  },
+  "homepage": "https://github.com/CassBaltz/Storymaker#readme"
+}
