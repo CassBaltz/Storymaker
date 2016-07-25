@@ -30,6 +30,7 @@ const ImageUtil = {
       data: {"file": `${data}`, "upload_preset": "zsh3fz7d"},
       success: function (response) {
         ImageUtil.saveStoryToDB(response, callback);
+
       }
     });
   },

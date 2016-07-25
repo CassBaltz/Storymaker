@@ -10,15 +10,13 @@ module.exports = React.createClass({
     let items;
     if (this.props.tiles.length > 0) {
       items = this.props.tiles.map((tile) => <StoryTile key={tile.id} tileInfo={tile} />)
+    } else {
+      items = <h3>Click Create to Add Tiles</h3>
     }
 
     return (
-      <div>
+      <div className="tiles-container">
         {items}
-        <div className="empty-tiles">
-          <h2>Add Tiles to Your Board</h2>
-          <h2 onClick={this.sendToPreview}>Preview</h2>
-        </div>
       </div>
     )
   }

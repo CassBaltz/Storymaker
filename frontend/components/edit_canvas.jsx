@@ -136,9 +136,10 @@ module.exports = React.createClass({
 
   render: function() {
     return (
-      <div>
-        <div onClick={this.submit}>Save Card</div>
+      <div className="edit-canvas-container">
+        <h2>click and start drawing!</h2>
         <canvas id="canvas" width="500" height="500"></canvas>
+        <div className="save-canvas-item" onClick={this.submit}><h2>Save Card</h2></div>
       </div>
     );
   }

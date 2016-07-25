@@ -4,6 +4,7 @@ const BoardBuild = require('./board_build');
 const CreateNav = require('./create_nav');
 const IIStore = require('../stores/image_items_store');
 const StoryPreview = require('./story_preview');
+const StoryShow = require('./story_show');
 
 module.exports = React.createClass({
   getInitialState: function () {
@@ -16,7 +17,7 @@ module.exports = React.createClass({
   },
 
   componentWillUnmount: function () {
-    this.listner.remove();
+    this.listener.remove();
   },
 
   updateBuild: function () {
@@ -33,12 +34,14 @@ module.exports = React.createClass({
       createAspect = <BoardBuild props={this.updatePage} tiles={this.state.currentTiles} />
     } else if (this.state.page === "edit") {
       createAspect = <EditCanvas props={this.updatePage} />
-    } else {
+    } else if (this.state.page === "preview") {
       createAspect = <StoryPreview props={this.updatePage} />
+    } else {
+      createAspect = <StoryShow props={this.updatePage} />
     }
 
     return (
-      <div>
+      <div className="story-create-container">
         {createAspect}
         <CreateNav changePage={this.updatePage} page={this.state.page}/>
       </div>

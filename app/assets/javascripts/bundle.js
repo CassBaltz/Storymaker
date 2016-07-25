@@ -61,7 +61,7 @@
 	var App = __webpack_require__(258);
 	var HomeScreen = __webpack_require__(259);
 	var StoryCreate = __webpack_require__(260);
-	var StoryIndex = __webpack_require__(268);
+	var StoryIndex = __webpack_require__(270);
 	
 	var appRouter = React.createElement(
 	  Router,
@@ -26725,6 +26725,7 @@
 	
 	var _IIs = {};
 	var _buildIIs = [];
+	var _currentStory = void 0;
 	
 	IIStore.all = function () {
 	  return Object.keys(_IIs).map(function (key) {
@@ -26745,12 +26746,24 @@
 	  _buildIIs = [];
 	};
 	
+	IIStore.getCurrentStory = function () {
+	  return _currentStory;
+	};
+	
 	function reset(items) {
 	  _IIs = {};
 	  items.forEach(function (item) {
 	    return _IIs[item.id] = item;
 	  });
 	};
+	
+	function clearBuild() {
+	  _buildIIs = [];
+	}
+	
+	function newStory(story) {
+	  _currentStory = story;
+	}
 	
 	function add(item) {
 	  _IIs[item.id] = item;
@@ -26761,6 +26774,12 @@
 	  switch (payload.actionType) {
 	    case IIConstants.UPDATE_IMAGE:
 	      add(payload.imageItem);
+	      IIStore.__emitChange();
+	      break;
+	
+	    case IIConstants.UPDATE_STORY:
+	      clearBuild();
+	      newStory(payload.storyItem);
 	      IIStore.__emitChange();
 	      break;
 	  }
@@ -33547,6 +33566,7 @@
 	'use strict';
 	
 	var React = __webpack_require__(1);
+	var hashHistory = __webpack_require__(172).hashHistory;
 	
 	module.exports = React.createClass({
 	  displayName: 'exports',
@@ -33558,7 +33578,16 @@
 	  render: function render() {
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'app-container' },
+	      React.createElement(
+	        'div',
+	        { className: 'header-bar' },
+	        React.createElement(
+	          'h1',
+	          null,
+	          'StoryMaker'
+	        )
+	      ),
 	      this.props.children
 	    );
 	  }
@@ -33568,18 +33597,40 @@
 /* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	var React = __webpack_require__(1);
+	var ReactRouter = __webpack_require__(172);
+	var Router = ReactRouter.Router;
+	var hashHistory = ReactRouter.hashHistory;
 	
 	module.exports = React.createClass({
-	  displayName: "exports",
+	  displayName: 'exports',
+	
+	  sendToCreate: function sendToCreate(e) {
+	    e.preventDefault();
+	    hashHistory.push('/create');
+	  },
 	
 	  render: function render() {
 	    return React.createElement(
-	      "div",
-	      null,
-	      "HomeScreen"
+	      'div',
+	      { className: 'home-screen-div' },
+	      React.createElement(
+	        'h3',
+	        null,
+	        'Welcome To StoryMaker'
+	      ),
+	      React.createElement(
+	        'p',
+	        null,
+	        'StoryMaker allows you to draw cards, save them as .gif files, and then share with friends.'
+	      ),
+	      React.createElement(
+	        'h3',
+	        { className: 'home-link', onClick: this.sendToCreate },
+	        'Click Here To Get Started!'
+	      )
 	    );
 	  }
 	});
@@ -33596,6 +33647,7 @@
 	var CreateNav = __webpack_require__(266);
 	var IIStore = __webpack_require__(235);
 	var StoryPreview = __webpack_require__(267);
+	var StoryShow = __webpack_require__(269);
 	
 	module.exports = React.createClass({
 	  displayName: 'exports',
@@ -33610,7 +33662,7 @@
 	  },
 	
 	  componentWillUnmount: function componentWillUnmount() {
-	    this.listner.remove();
+	    this.listener.remove();
 	  },
 	
 	  updateBuild: function updateBuild() {
@@ -33627,13 +33679,15 @@
 	      createAspect = React.createElement(BoardBuild, { props: this.updatePage, tiles: this.state.currentTiles });
 	    } else if (this.state.page === "edit") {
 	      createAspect = React.createElement(EditCanvas, { props: this.updatePage });
-	    } else {
+	    } else if (this.state.page === "preview") {
 	      createAspect = React.createElement(StoryPreview, { props: this.updatePage });
+	    } else {
+	      createAspect = React.createElement(StoryShow, { props: this.updatePage });
 	    }
 	
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'story-create-container' },
 	      createAspect,
 	      React.createElement(CreateNav, { changePage: this.updatePage, page: this.state.page })
 	    );
@@ -33787,13 +33841,22 @@
 	    render: function render() {
 	        return React.createElement(
 	            "div",
-	            null,
+	            { className: "edit-canvas-container" },
+	            React.createElement(
+	                "h2",
+	                null,
+	                "click and start drawing!"
+	            ),
+	            React.createElement("canvas", { id: "canvas", width: "500", height: "500" }),
 	            React.createElement(
 	                "div",
-	                { onClick: this.submit },
-	                "Save Card"
-	            ),
-	            React.createElement("canvas", { id: "canvas", width: "500", height: "500" })
+	                { className: "save-canvas-item", onClick: this.submit },
+	                React.createElement(
+	                    "h2",
+	                    null,
+	                    "Save Card"
+	                )
+	            )
 	        );
 	    }
 	});
@@ -33813,7 +33876,7 @@
 	    ImageUtil.uploadImage(data, ImageActions.updateImage);
 	  },
 	
-	  saveStore: function saveStore(data) {
+	  saveStory: function saveStory(data) {
 	    ImageUtil.uploadStory(data, ImageActions.updateStory);
 	  },
 	
@@ -33826,7 +33889,7 @@
 	
 	  updateStory: function updateStory(data) {
 	    Dispatcher.dispatch({
-	      actionType: IIConstants.UPDATE_IMAGE,
+	      actionType: IIConstants.UPDATE_STORY,
 	      storyItem: data
 	    });
 	  }
@@ -33913,26 +33976,18 @@
 	      items = this.props.tiles.map(function (tile) {
 	        return React.createElement(StoryTile, { key: tile.id, tileInfo: tile });
 	      });
+	    } else {
+	      items = React.createElement(
+	        "h3",
+	        null,
+	        "Click Create to Add Tiles"
+	      );
 	    }
 	
 	    return React.createElement(
 	      "div",
-	      null,
-	      items,
-	      React.createElement(
-	        "div",
-	        { className: "empty-tiles" },
-	        React.createElement(
-	          "h2",
-	          null,
-	          "Add Tiles to Your Board"
-	        ),
-	        React.createElement(
-	          "h2",
-	          { onClick: this.sendToPreview },
-	          "Preview"
-	        )
-	      )
+	      { className: "tiles-container" },
+	      items
 	    );
 	  }
 	});
@@ -33982,13 +34037,19 @@
 	    }
 	  },
 	
+	  changeToPreview: function changeToPreview() {
+	    if (this.props.page !== "preview") {
+	      this.props.changePage("preview");
+	    }
+	  },
+	
 	  render: function render() {
 	    return React.createElement(
 	      "div",
 	      { className: "create-navbar" },
 	      React.createElement(
 	        "div",
-	        { onClick: this.changeToHome, className: "home-button" },
+	        { onClick: this.changeToHome, className: "nav-button" },
 	        React.createElement(
 	          "h3",
 	          null,
@@ -33997,7 +34058,16 @@
 	      ),
 	      React.createElement(
 	        "div",
-	        { onClick: this.changeToBuild, className: "create-button" },
+	        { onClick: this.changeToPreview, className: "nav-button" },
+	        React.createElement(
+	          "h3",
+	          null,
+	          "Preview"
+	        )
+	      ),
+	      React.createElement(
+	        "div",
+	        { onClick: this.changeToBuild, className: "nav-button" },
 	        React.createElement(
 	          "h3",
 	          null,
@@ -34016,17 +34086,16 @@
 	
 	var React = __webpack_require__(1);
 	var IIStore = __webpack_require__(235);
-	var gifshot = __webpack_require__(270);
+	var gifshot = __webpack_require__(268);
 	var ImageActions = __webpack_require__(262);
 	
 	var image = void 0;
 	var loopVar = true;
-	var speed = 500;
+	var speed = 700;
 	var interval = 0;
-	var renderimg = document.getElementById("render");
 	
-	module.exports = React.createClass({
-	  displayName: 'exports',
+	var StoryPreview = React.createClass({
+	  displayName: 'StoryPreview',
 	
 	  getInitialState: function getInitialState() {
 	    return { images: IIStore.buildIIs(), image: null };
@@ -34047,6 +34116,10 @@
 	
 	  clearPreview: function clearPreview(e) {
 	    e.preventDefault();
+	    clearInterval(this.interval);
+	  },
+	
+	  endLoop: function endLoop() {
 	    clearInterval(this.interval);
 	  },
 	
@@ -34080,6 +34153,10 @@
 	    this.interval = setInterval(this.loop, speed);
 	  },
 	
+	  goToGif: function goToGif() {
+	    this.props.props("view-story");
+	  },
+	
 	  create: function create(e) {
 	    e.preventDefault();
 	
@@ -34093,12 +34170,14 @@
 	      'saveRenderingContexts': true,
 	      'crossOrigin': 'Anonymous',
 	      'gifWidth': 350,
-	      'gifHeigth': 350
+	      'gifHeight': 350
 	    }, function (obj) {
 	      if (!obj.error) {
-	        debugger;
+	        this.endLoop();
+	        ImageActions.saveStory(obj.image);
+	        this.goToGif();
 	      }
-	    }).bind(this);
+	    }.bind(this));
 	  },
 	
 	  render: function render() {
@@ -34107,63 +34186,46 @@
 	      { className: 'gif-holder' },
 	      React.createElement('img', { className: 'gif-item', src: this.state.image }),
 	      React.createElement(
-	        'button',
-	        { onClick: this.buildPreview },
-	        'watch preview'
+	        'div',
+	        { className: 'action' },
+	        React.createElement(
+	          'h3',
+	          { onClick: this.slowSpeed },
+	          'slow'
+	        ),
+	        React.createElement(
+	          'h3',
+	          { onClick: this.mediumSpeed },
+	          'medium'
+	        ),
+	        React.createElement(
+	          'h3',
+	          { onClick: this.fastSpeed },
+	          'fast'
+	        )
 	      ),
 	      React.createElement(
-	        'button',
-	        { onClick: this.clearPreview },
-	        'stop preview'
-	      ),
-	      React.createElement(
-	        'button',
-	        { onClick: this.slowSpeed },
-	        'slow'
-	      ),
-	      React.createElement(
-	        'button',
-	        { onClick: this.mediumSpeed },
-	        'medium'
-	      ),
-	      React.createElement(
-	        'button',
-	        { onClick: this.fastSpeed },
-	        'fast'
-	      ),
-	      React.createElement(
-	        'button',
-	        { onClick: this.create },
-	        'create'
-	      ),
-	      React.createElement('img', { id: 'render' })
+	        'div',
+	        { className: 'action' },
+	        React.createElement(
+	          'h3',
+	          { onClick: this.create },
+	          'CREATE GIF!'
+	        ),
+	        React.createElement(
+	          'h3',
+	          { onClick: this.clearPreview },
+	          'stop preview'
+	        )
+	      )
 	    );
 	  }
 	});
+	
+	module.exports = StoryPreview;
 
 /***/ },
 /* 268 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var React = __webpack_require__(1);
-	
-	module.exports = React.createClass({
-	  displayName: "exports",
-	
-	  render: function render() {
-	    return React.createElement(
-	      "div",
-	      null,
-	      "StoryIndex"
-	    );
-	  }
-	});
-
-/***/ },
-/* 269 */,
-/* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*Copyrights for code authored by Yahoo Inc. is licensed under the following terms:
@@ -35883,6 +35945,79 @@
 	  }
 	}(API));
 	}(typeof window !== "undefined" ? window : {}, typeof document !== "undefined" ? document : { createElement: function() {} }, typeof window !== "undefined" ? window.navigator : {}));
+
+/***/ },
+/* 269 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(1);
+	var IIStore = __webpack_require__(235);
+	
+	module.exports = React.createClass({
+	  displayName: "exports",
+	
+	  getInitialState: function getInitialState() {
+	    return { story: null };
+	  },
+	
+	  componentDidMount: function componentDidMount() {
+	    this.listener = IIStore.addListener(this.update);
+	  },
+	
+	  update: function update() {
+	    this.setState({ story: IIStore.getCurrentStory() });
+	  },
+	
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.listener.remove();
+	  },
+	
+	  render: function render() {
+	    var display = void 0;
+	    if (this.state.story === null) {
+	      display = React.createElement(
+	        "h3",
+	        null,
+	        "No Gif"
+	      );
+	    } else {
+	      display = React.createElement("img", { className: "gif-display", src: this.state.story.gif });
+	    }
+	
+	    return React.createElement(
+	      "div",
+	      { className: "story-show-container" },
+	      React.createElement(
+	        "h3",
+	        null,
+	        "click on the .gif to copy, then send it to your friends"
+	      ),
+	      display
+	    );
+	  }
+	});
+
+/***/ },
+/* 270 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(1);
+	
+	module.exports = React.createClass({
+	  displayName: "exports",
+	
+	  render: function render() {
+	    return React.createElement(
+	      "div",
+	      null,
+	      "StoryIndex"
+	    );
+	  }
+	});
 
 /***/ }
 /******/ ]);

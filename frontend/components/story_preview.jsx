@@ -6,11 +6,10 @@ const ImageActions = require('../actions/image_actions');
 
 let image;
 let loopVar = true;
-let speed = 500;
+let speed = 700;
 let interval = 0;
-let renderimg = document.getElementById("render");
 
-module.exports = React.createClass({
+const StoryPreview = React.createClass({
   getInitialState: function() {
     return {images: IIStore.buildIIs(), image: null}
   },
@@ -30,6 +29,10 @@ module.exports = React.createClass({
 
   clearPreview: function (e) {
     e.preventDefault();
+    clearInterval(this.interval);
+  },
+
+  endLoop: function () {
     clearInterval(this.interval);
   },
 
@@ -63,11 +66,15 @@ module.exports = React.createClass({
     this.interval = setInterval(this.loop, speed);
   },
 
+  goToGif: function () {
+    this.props.props("view-story");
+  },
+
   create: function (e) {
     e.preventDefault();
 
     let images = this.state.images.map(image => {
-      return image['picture']
+      return image['picture'];
     });
 
     gifshot.createGIF({
@@ -76,27 +83,32 @@ module.exports = React.createClass({
     'saveRenderingContexts': true,
     'crossOrigin': 'Anonymous',
     'gifWidth': 350,
-    'gifHeigth': 350
+    'gifHeight': 350
     },function(obj) {
       if(!obj.error) {
-        debugger
+        this.endLoop();
+        ImageActions.saveStory(obj.image);
+        this.goToGif();
       }
-    }).bind(this);
-
+    }.bind(this));
   },
 
   render: function () {
     return (
       <div className="gif-holder">
         <img className="gif-item" src={this.state.image}></img>
-        <button onClick={this.buildPreview}>watch preview</button>
-        <button onClick={this.clearPreview}>stop preview</button>
-        <button onClick={this.slowSpeed}>slow</button>
-        <button onClick={this.mediumSpeed}>medium</button>
-        <button onClick={this.fastSpeed}>fast</button>
-        <button onClick={this.create}>create</button>
-        <img id="render"></img>
+        <div className="action">
+          <h3 onClick={this.slowSpeed}>slow</h3>
+          <h3 onClick={this.mediumSpeed}>medium</h3>
+          <h3 onClick={this.fastSpeed}>fast</h3>
+        </div>
+        <div className="action">
+          <h3 onClick={this.create}>CREATE GIF!</h3>
+          <h3 onClick={this.clearPreview}>stop preview</h3>
+        </div>
       </div>
     );
   }
 });
+
+module.exports = StoryPreview;

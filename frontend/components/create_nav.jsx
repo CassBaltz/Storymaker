@@ -17,13 +17,22 @@ module.exports = React.createClass({
     }
   },
 
+  changeToPreview: function () {
+    if (this.props.page !== "preview") {
+      this.props.changePage("preview")
+    }
+  },
+
   render: function () {
     return (
       <div className="create-navbar">
-        <div onClick={this.changeToHome} className="home-button">
+        <div onClick={this.changeToHome} className="nav-button">
           <h3>Home</h3>
         </div>
-        <div onClick={this.changeToBuild} className="create-button">
+        <div onClick={this.changeToPreview} className="nav-button">
+          <h3>Preview</h3>
+        </div>
+        <div onClick={this.changeToBuild} className="nav-button">
           <h3>Create</h3>
         </div>
       </div>

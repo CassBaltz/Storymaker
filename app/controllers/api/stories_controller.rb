@@ -5,7 +5,7 @@ class Api::StoriesController < ApplicationController
 
   def create
     @story = Story.new(story_params)
-    if @story_item.save
+    if @story.save
       redirect_to api_story_path(@story)
     end
   end
