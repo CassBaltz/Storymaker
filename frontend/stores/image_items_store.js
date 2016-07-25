@@ -15,13 +15,14 @@ IIStore.find = function (id) {
   return _IIs[id];
 };
 
-IIStore._buildIIs = function () {
+IIStore.buildIIs = function () {
   return _buildIIs;
+  IIStore.__emitChange();
 };
 
 IIStore.clearBuildIIs = function () {
   _buildIIs = [];
-}
+};
 
 function reset (items) {
   _IIs = {};

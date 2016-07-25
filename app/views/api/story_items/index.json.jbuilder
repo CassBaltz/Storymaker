@@ -1,1 +1,1 @@
-json.array! @story_items, :url, :picture
+json.array! @story_items, :id, :picture

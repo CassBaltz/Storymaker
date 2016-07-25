@@ -7,11 +7,21 @@ const ImageActions = {
     ImageUtil.uploadImage(data, ImageActions.updateImage)
   },
 
+  saveStore: function (data) {
+    ImageUtil.uploadStory(data, ImageActions.updateStory)
+  },
+
   updateImage: function (data) {
-    debugger;
     Dispatcher.dispatch({
       actionType: IIConstants.UPDATE_IMAGE,
       imageItem: data
+    });
+  },
+
+  updateStory: function (data) {
+    Dispatcher.dispatch({
+      actionType: IIConstants.UPDATE_IMAGE,
+      storyItem: data
     });
   }
 };
