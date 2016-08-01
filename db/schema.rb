@@ -32,14 +32,9 @@ ActiveRecord::Schema.define(version: 20160719185741) do
   end
 
   create_table "story_joins", force: :cascade do |t|
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.integer  "story_item_id", null: false
-    t.integer  "story_id",      null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
-
-  add_index "story_joins", ["story_id"], name: "index_story_joins_on_story_id", using: :btree
-  add_index "story_joins", ["story_item_id"], name: "index_story_joins_on_story_item_id", using: :btree
 
   create_table "taggings", force: :cascade do |t|
     t.integer  "tag_id",        null: false
