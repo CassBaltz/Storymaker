@@ -109,9 +109,80 @@ div.edit-canvas-container {
   align-items: center;
 }
 
+div.canvas-container {
+  position: relative;
+}
+
+
+div.react-color-picker__hue-spectrum {
+  height: 300px;
+  width: 30px;
+  position: absolute;
+  border-radius: 5px;
+  z-index: 1;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+div.react-color-picker__hue-spectrum .react-color-picker__hue-drag {
+  display: none !important;
+}
+
+div.color-box {
+  border-radius: 5px;
+  position: absolute;
+  z-index: 1;
+  color: #C3C3E5;
+  margin-left: 50px;
+  margin-top: 10px;
+}
+
+#pen {
+  font-size: 18px;
+  text-align: center;
+  display: block;
+  margin: auto;
+  text-align: center;
+  line-height: 30px;
+  vertical-align: center
+}
+
+div.clear-canvas {
+width: 30px;
+height: 30px;
+border-radius: 5px;
+z-index: 1;
+position: absolute;
+right: 0;
+top: 0;
+background: transparent;
+color: #443266;
+font-size: 18px;
+text-align: center;
+line-height: 30px;
+margin-top: 10px;
+margin-right: 10px
+}
+
+div.save-card {
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
+  z-index: 1;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  background: #443266;
+  color: #C3C3E5;
+  font-size: 24px;
+  text-align: center;
+  line-height: 30px;
+  margin-bottom: 15px;
+  margin-right: 10px
+}
+
 canvas {
   border: 4px solid #C3C3E5;
-  margin: 0 auto;
   border-radius: 10px;
 }
 
