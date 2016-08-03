@@ -77,7 +77,6 @@ div.create-navbar > div {
 }
 
 div.home-screen-div {
-  min-height: 90vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -91,9 +90,9 @@ div.home-screen-div > p {
 }
 
 div.home-screen-div > h3 {
-  margin: 40px;
+  margin: 50px;
   text-align: center;
-  font-size: 40px;
+  font-size: 30px;
   color: #443266
 }
 
