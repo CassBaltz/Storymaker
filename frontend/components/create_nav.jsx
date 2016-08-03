@@ -15,8 +15,6 @@ module.exports = React.createClass({
       $(".create-navbar").first().children().removeClass("nav-clicked");
       $("#preview-div").addClass('nav-clicked');
     }
-
-
   },
 
   changeToBuild: function () {
@@ -41,13 +39,13 @@ module.exports = React.createClass({
     return (
       <div className="create-navbar">
         <div id="home-div" onClick={this.changeToHome} className="nav-button nav-clicked">
-          <h3>Cards</h3>
+          <h3>Cards {this.props.count}</h3>
         </div>
         <div id="preview-div" onClick={this.changeToPreview} className="nav-button">
-          <h3>Preview {this.props.count}</h3>
+          <h3>Preview</h3>
         </div>
         <div id="edit-div" onClick={this.changeToBuild} className="nav-button">
-          <h3>Create</h3>
+          <h3>Draw</h3>
         </div>
       </div>
     );

@@ -79,8 +79,6 @@
 	  var root = document.getElementById('content');
 	  ReactDOM.render(appRouter, root);
 	});
-	
-	window.IIStore = IIStore;
 
 /***/ },
 /* 1 */
@@ -39304,7 +39302,8 @@
 	        React.createElement(
 	          "h3",
 	          null,
-	          "Cards"
+	          "Cards ",
+	          this.props.count
 	        )
 	      ),
 	      React.createElement(
@@ -39313,8 +39312,7 @@
 	        React.createElement(
 	          "h3",
 	          null,
-	          "Preview ",
-	          this.props.count
+	          "Preview"
 	        )
 	      ),
 	      React.createElement(
@@ -39323,7 +39321,7 @@
 	        React.createElement(
 	          "h3",
 	          null,
-	          "Create"
+	          "Draw"
 	        )
 	      )
 	    );
@@ -39511,10 +39509,22 @@
 	          ),
 	          React.createElement(
 	            'div',
-	            { className: 'div-bars-holder' },
-	            React.createElement('div', { onClick: this.slowSpeed, id: 'slow-div', className: 'div-bars' }),
-	            React.createElement('div', { onClick: this.mediumSpeed, id: 'medium-div', className: 'div-bars' }),
-	            React.createElement('div', { onClick: this.fastSpeed, id: 'fast-div', className: 'div-bars' })
+	            { className: 'div-bars-holder hidden' },
+	            React.createElement(
+	              'div',
+	              { onClick: this.slowSpeed, id: 'slow-div', className: 'div-bars' },
+	              '>'
+	            ),
+	            React.createElement(
+	              'div',
+	              { onClick: this.mediumSpeed, id: 'medium-div', className: 'div-bars' },
+	              '> >'
+	            ),
+	            React.createElement(
+	              'div',
+	              { onClick: this.fastSpeed, id: 'fast-div', className: 'div-bars' },
+	              '> > >'
+	            )
 	          )
 	        ),
 	        React.createElement(

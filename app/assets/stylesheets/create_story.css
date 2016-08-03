@@ -6,6 +6,16 @@ body {
   font-family: 'Raleway', sans-serif;
 }
 
+div#personal-info {
+  text-align: center;
+  color: #8C489F;
+}
+
+div#personal-info > h2 > a {
+  text-decoration: none;
+  color: #C3C3E5;
+}
+
 div#content {
   margin: 0;
   display: block;
@@ -446,7 +456,8 @@ div.div-bars {
   width: 50px;
   height: 20px;
   margin: 5px;
-  background: white;
+  color: white;
+  text-align: center
 }
 
 div.div-bars:hover {

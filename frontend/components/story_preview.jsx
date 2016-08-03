@@ -150,13 +150,13 @@ const StoryPreview = React.createClass({
             <i onClick={this.showBars} id="clock" className="material-icons md-48">
               access_time
             </i>
-            <div className="div-bars-holder">
+            <div className="div-bars-holder hidden">
               <div onClick={this.slowSpeed} id="slow-div" className="div-bars" >
-              </div>
+              ></div>
               <div onClick={this.mediumSpeed} id="medium-div" className="div-bars">
-              </div>
+              > ></div>
               <div onClick={this.fastSpeed} id="fast-div" className="div-bars">
-              </div>
+              > > ></div>
             </div>
           </div>
           <div onClick={this.create}>
