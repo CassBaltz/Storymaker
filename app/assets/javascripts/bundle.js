@@ -34029,6 +34029,7 @@
 	
 	  render: function render() {
 	    var createAspect = void 0;
+	    var count = this.state.currentTiles.length;
 	    if (this.state.page === "home") {
 	      createAspect = React.createElement(BoardBuild, { props: this.updatePage, tiles: this.state.currentTiles });
 	    } else if (this.state.page === "edit") {
@@ -34038,12 +34039,11 @@
 	    } else {
 	      createAspect = React.createElement(StoryShow, { props: this.updatePage });
 	    }
-	
 	    return React.createElement(
 	      'div',
 	      { className: 'story-create-container' },
 	      createAspect,
-	      React.createElement(CreateNav, { changePage: this.updatePage, page: this.state.page })
+	      React.createElement(CreateNav, { changePage: this.updatePage, page: this.state.page, count: count })
 	    );
 	  }
 	});
@@ -39200,28 +39200,33 @@
 	module.exports = React.createClass({
 	  displayName: "exports",
 	
-	  sendToPreview: function sendToPreview() {
-	    this.props.props("preview");
-	  },
-	
 	  render: function render() {
+	    var _this = this;
+	
 	    var items = void 0;
 	    if (this.props.tiles.length > 0) {
 	      items = this.props.tiles.map(function (tile) {
 	        return React.createElement(StoryTile, { key: tile.id, tileInfo: tile });
 	      });
 	    } else {
-	      items = React.createElement(
-	        "h3",
-	        null,
-	        "Click Create to Add Tiles"
-	      );
+	      items = null;
 	    }
 	
 	    return React.createElement(
 	      "div",
 	      { className: "tiles-container" },
-	      items
+	      items,
+	      React.createElement(
+	        "div",
+	        { onClick: function onClick() {
+	            return _this.props.props("edit");
+	          }, className: "tile-board-add" },
+	        React.createElement(
+	          "h2",
+	          null,
+	          "+"
+	        )
+	      )
 	    );
 	  }
 	});
@@ -39255,8 +39260,20 @@
 	module.exports = React.createClass({
 	  displayName: "exports",
 	
-	  getInitialState: function getInitialState() {
-	    return { button: this.props.page };
+	
+	  componentWillReceiveProps: function componentWillReceiveProps(props) {
+	    if (props.page === "home") {
+	      $(".create-navbar").first().children().removeClass("nav-clicked");
+	      $("#home-div").addClass('nav-clicked');
+	    }
+	    if (props.page === "edit") {
+	      $(".create-navbar").first().children().removeClass("nav-clicked");
+	      $("#edit-div").addClass('nav-clicked');
+	    }
+	    if (props.page === "preview") {
+	      $(".create-navbar").first().children().removeClass("nav-clicked");
+	      $("#preview-div").addClass('nav-clicked');
+	    }
 	  },
 	
 	  changeToBuild: function changeToBuild() {
@@ -39283,25 +39300,26 @@
 	      { className: "create-navbar" },
 	      React.createElement(
 	        "div",
-	        { onClick: this.changeToHome, className: "nav-button" },
+	        { id: "home-div", onClick: this.changeToHome, className: "nav-button nav-clicked" },
 	        React.createElement(
 	          "h3",
 	          null,
-	          "Home"
+	          "Cards"
 	        )
 	      ),
 	      React.createElement(
 	        "div",
-	        { onClick: this.changeToPreview, className: "nav-button" },
+	        { id: "preview-div", onClick: this.changeToPreview, className: "nav-button" },
 	        React.createElement(
 	          "h3",
 	          null,
-	          "Preview"
+	          "Preview ",
+	          this.props.count
 	        )
 	      ),
 	      React.createElement(
 	        "div",
-	        { onClick: this.changeToBuild, className: "nav-button" },
+	        { id: "edit-div", onClick: this.changeToBuild, className: "nav-button" },
 	        React.createElement(
 	          "h3",
 	          null,
@@ -39342,14 +39360,24 @@
 	    }
 	  },
 	
-	  buildPreview: function buildPreview(e) {
-	    e.preventDefault();
+	  startPlaying: function startPlaying() {
+	    $("#play-button").addClass("play-green");
+	    $("#stop-square").removeClass("stop-red");
+	    this.buildPreview();
+	  },
+	
+	  stopPlaying: function stopPlaying() {
+	    $("#play-button").removeClass("play-green");
+	    $("#stop-square").addClass("stop-red");
+	    this.clearPreview();
+	  },
+	
+	  buildPreview: function buildPreview() {
 	    clearInterval(this.interval);
 	    this.interval = setInterval(this.loop, speed);
 	  },
 	
-	  clearPreview: function clearPreview(e) {
-	    e.preventDefault();
+	  clearPreview: function clearPreview() {
 	    clearInterval(this.interval);
 	  },
 	
@@ -39368,23 +39396,45 @@
 	
 	  slowSpeed: function slowSpeed(e) {
 	    e.preventDefault();
+	    $('.div-bars-holder').first().addClass('hidden');
+	    $('#clock').removeClass('clock-medium');
+	    $('#clock').removeClass('clock-fast');
+	    $('#clock').addClass('clock-slow');
 	    speed = 1000;
 	    clearInterval(this.interval);
-	    this.interval = setInterval(this.loop, speed);
+	    if (this.state.images.length > 1) {
+	      this.startPlaying();
+	    }
 	  },
 	
 	  mediumSpeed: function mediumSpeed(e) {
 	    e.preventDefault();
+	    $('.div-bars-holder').first().addClass('hidden');
+	    $('#clock').removeClass('clock-slow');
+	    $('#clock').removeClass('clock-fast');
+	    $('#clock').addClass('clock-medium');
 	    speed = 700;
 	    clearInterval(this.interval);
-	    this.interval = setInterval(this.loop, speed);
+	    if (this.state.images.length > 1) {
+	      this.startPlaying();
+	    }
 	  },
 	
 	  fastSpeed: function fastSpeed(e) {
 	    e.preventDefault();
+	    $('.div-bars-holder').first().addClass('hidden');
+	    $('#clock').removeClass('clock-slow');
+	    $('#clock').removeClass('clock-medium');
+	    $('#clock').addClass('clock-fast');
 	    speed = 400;
 	    clearInterval(this.interval);
-	    this.interval = setInterval(this.loop, speed);
+	    if (this.state.images.length > 1) {
+	      this.startPlaying();
+	    }
+	  },
+	
+	  showBars: function showBars(e) {
+	    $('.div-bars-holder').removeClass('hidden');
 	  },
 	
 	  goToGif: function goToGif() {
@@ -39407,7 +39457,7 @@
 	      'gifHeight': 350
 	    }, function (obj) {
 	      if (!obj.error) {
-	        this.endLoop();
+	        this.clearPreview();
 	        ImageActions.saveStory(obj.image);
 	        this.goToGif();
 	      }
@@ -39415,41 +39465,66 @@
 	  },
 	
 	  render: function render() {
+	    var headerCard = void 0;
+	    if (this.state.images.length > 0) {
+	      headerCard = React.createElement(
+	        'div',
+	        { className: 'image-holder' },
+	        React.createElement('img', { className: 'gif-item', src: this.state.image }),
+	        React.createElement(
+	          'i',
+	          { id: 'stop-square', className: 'material-icons md-30', onClick: this.stopPlaying },
+	          'stop'
+	        ),
+	        React.createElement(
+	          'i',
+	          { id: 'play-button', className: 'material-icons md-30', onClick: this.startPlaying },
+	          'play_arrow'
+	        )
+	      );
+	    } else {
+	      headerCard = React.createElement(
+	        'div',
+	        { className: 'blank-header-card' },
+	        React.createElement(
+	          'h2',
+	          null,
+	          'No Cards Created'
+	        )
+	      );
+	    }
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'gif-holder' },
-	      React.createElement('img', { className: 'gif-item', src: this.state.image }),
+	      headerCard,
 	      React.createElement(
 	        'div',
-	        { className: 'action' },
+	        { className: 'action-holder' },
 	        React.createElement(
-	          'h3',
-	          { onClick: this.slowSpeed },
-	          'slow'
+	          'div',
+	          { className: 'action' },
+	          React.createElement(
+	            'i',
+	            { onClick: this.showBars, id: 'clock', className: 'material-icons md-48' },
+	            'access_time'
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'div-bars-holder' },
+	            React.createElement('div', { onClick: this.slowSpeed, id: 'slow-div', className: 'div-bars' }),
+	            React.createElement('div', { onClick: this.mediumSpeed, id: 'medium-div', className: 'div-bars' }),
+	            React.createElement('div', { onClick: this.fastSpeed, id: 'fast-div', className: 'div-bars' })
+	          )
 	        ),
 	        React.createElement(
-	          'h3',
-	          { onClick: this.mediumSpeed },
-	          'medium'
-	        ),
-	        React.createElement(
-	          'h3',
-	          { onClick: this.fastSpeed },
-	          'fast'
-	        )
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'action' },
-	        React.createElement(
-	          'h3',
+	          'div',
 	          { onClick: this.create },
-	          'CREATE GIF!'
-	        ),
-	        React.createElement(
-	          'h3',
-	          { onClick: this.clearPreview },
-	          'stop preview'
+	          React.createElement(
+	            'h3',
+	            { className: 'create-link' },
+	            'CREATE!'
+	          )
 	        )
 	      )
 	    );

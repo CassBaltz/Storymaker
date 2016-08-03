@@ -11,7 +11,7 @@ let interval = 0;
 
 const StoryPreview = React.createClass({
   getInitialState: function() {
-    return {images: IIStore.buildIIs(), image: null}
+    return {images: IIStore.buildIIs(), image: null};
   },
 
   componentDidMount: function () {
@@ -21,14 +21,24 @@ const StoryPreview = React.createClass({
     }
   },
 
-  buildPreview: function (e) {
-    e.preventDefault();
+  startPlaying: function () {
+    $("#play-button").addClass("play-green")
+    $("#stop-square").removeClass("stop-red")
+    this.buildPreview();
+  },
+
+  stopPlaying: function () {
+    $("#play-button").removeClass("play-green")
+    $("#stop-square").addClass("stop-red")
+    this.clearPreview();
+  },
+
+  buildPreview: function () {
     clearInterval(this.interval);
     this.interval = setInterval(this.loop, speed);
   },
 
-  clearPreview: function (e) {
-    e.preventDefault();
+  clearPreview: function () {
     clearInterval(this.interval);
   },
 
@@ -47,24 +57,47 @@ const StoryPreview = React.createClass({
 
   slowSpeed: function (e) {
     e.preventDefault();
+    $('.div-bars-holder').first().addClass('hidden')
+    $('#clock').removeClass('clock-medium')
+    $('#clock').removeClass('clock-fast')
+    $('#clock').addClass('clock-slow')
     speed = 1000;
     clearInterval(this.interval);
-    this.interval = setInterval(this.loop, speed);
+    if (this.state.images.length > 1) {
+      this.startPlaying();
+    }
   },
 
   mediumSpeed: function (e) {
     e.preventDefault();
+    $('.div-bars-holder').first().addClass('hidden')
+    $('#clock').removeClass('clock-slow')
+    $('#clock').removeClass('clock-fast')
+    $('#clock').addClass('clock-medium')
     speed = 700;
     clearInterval(this.interval);
-    this.interval = setInterval(this.loop, speed);
+    if (this.state.images.length > 1) {
+      this.startPlaying();
+    }
   },
 
   fastSpeed: function (e) {
     e.preventDefault();
+    $('.div-bars-holder').first().addClass('hidden')
+    $('#clock').removeClass('clock-slow')
+    $('#clock').removeClass('clock-medium')
+    $('#clock').addClass('clock-fast')
     speed = 400;
     clearInterval(this.interval);
-    this.interval = setInterval(this.loop, speed);
+    if (this.state.images.length > 1) {
+      this.startPlaying();
+    }
   },
+
+  showBars: function (e) {
+    $('.div-bars-holder').removeClass('hidden')
+  },
+
 
   goToGif: function () {
     this.props.props("view-story");
@@ -84,9 +117,9 @@ const StoryPreview = React.createClass({
     'crossOrigin': 'Anonymous',
     'gifWidth': 350,
     'gifHeight': 350
-    },function(obj) {
+    }, function(obj) {
       if(!obj.error) {
-        this.endLoop();
+        this.clearPreview();
         ImageActions.saveStory(obj.image);
         this.goToGif();
       }
@@ -94,17 +127,41 @@ const StoryPreview = React.createClass({
   },
 
   render: function () {
+    let headerCard;
+    if (this.state.images.length > 0) {
+      headerCard =
+      <div className="image-holder">
+        <img className="gif-item" src={this.state.image}></img>
+          <i id="stop-square" className="material-icons md-30" onClick={this.stopPlaying}>stop</i>
+          <i id="play-button" className="material-icons md-30" onClick={this.startPlaying}>play_arrow</i>
+      </div>
+
+    } else {
+      headerCard =  <div className="blank-header-card">
+                      <h2>No Cards Created</h2>
+                    </div>
+    }
+
     return (
       <div className="gif-holder">
-        <img className="gif-item" src={this.state.image}></img>
-        <div className="action">
-          <h3 onClick={this.slowSpeed}>slow</h3>
-          <h3 onClick={this.mediumSpeed}>medium</h3>
-          <h3 onClick={this.fastSpeed}>fast</h3>
-        </div>
-        <div className="action">
-          <h3 onClick={this.create}>CREATE GIF!</h3>
-          <h3 onClick={this.clearPreview}>stop preview</h3>
+        {headerCard}
+        <div className="action-holder">
+          <div className="action">
+            <i onClick={this.showBars} id="clock" className="material-icons md-48">
+              access_time
+            </i>
+            <div className="div-bars-holder">
+              <div onClick={this.slowSpeed} id="slow-div" className="div-bars" >
+              </div>
+              <div onClick={this.mediumSpeed} id="medium-div" className="div-bars">
+              </div>
+              <div onClick={this.fastSpeed} id="fast-div" className="div-bars">
+              </div>
+            </div>
+          </div>
+          <div onClick={this.create}>
+            <h3 className="create-link">CREATE!</h3>
+          </div>
         </div>
       </div>
     );

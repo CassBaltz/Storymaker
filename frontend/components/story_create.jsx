@@ -30,6 +30,7 @@ module.exports = React.createClass({
 
   render: function() {
     let createAspect;
+    let count = this.state.currentTiles.length;
     if (this.state.page === "home") {
       createAspect = <BoardBuild props={this.updatePage} tiles={this.state.currentTiles} />
     } else if (this.state.page === "edit") {
@@ -39,11 +40,10 @@ module.exports = React.createClass({
     } else {
       createAspect = <StoryShow props={this.updatePage} />
     }
-
     return (
       <div className="story-create-container">
         {createAspect}
-        <CreateNav changePage={this.updatePage} page={this.state.page}/>
+        <CreateNav changePage={this.updatePage} page={this.state.page} count={count}/>
       </div>
     );
   }

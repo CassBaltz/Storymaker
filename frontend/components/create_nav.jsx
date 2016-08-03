@@ -1,8 +1,22 @@
 const React = require('react');
 
 module.exports = React.createClass({
-  getInitialState: function () {
-    return {button: this.props.page}
+
+  componentWillReceiveProps: function (props) {
+    if (props.page === "home") {
+      $(".create-navbar").first().children().removeClass("nav-clicked");
+      $("#home-div").addClass('nav-clicked');
+    }
+    if (props.page === "edit") {
+      $(".create-navbar").first().children().removeClass("nav-clicked");
+      $("#edit-div").addClass('nav-clicked');
+    }
+    if (props.page === "preview") {
+      $(".create-navbar").first().children().removeClass("nav-clicked");
+      $("#preview-div").addClass('nav-clicked');
+    }
+
+
   },
 
   changeToBuild: function () {
@@ -26,13 +40,13 @@ module.exports = React.createClass({
   render: function () {
     return (
       <div className="create-navbar">
-        <div onClick={this.changeToHome} className="nav-button">
-          <h3>Home</h3>
+        <div id="home-div" onClick={this.changeToHome} className="nav-button nav-clicked">
+          <h3>Cards</h3>
         </div>
-        <div onClick={this.changeToPreview} className="nav-button">
-          <h3>Preview</h3>
+        <div id="preview-div" onClick={this.changeToPreview} className="nav-button">
+          <h3>Preview {this.props.count}</h3>
         </div>
-        <div onClick={this.changeToBuild} className="nav-button">
+        <div id="edit-div" onClick={this.changeToBuild} className="nav-button">
           <h3>Create</h3>
         </div>
       </div>
