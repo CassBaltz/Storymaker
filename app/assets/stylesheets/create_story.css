@@ -32,18 +32,20 @@ div.header-bar {
 div.header-bar > h1 {
   margin: 0;
   padding: 0;
-  font-size: 60px
+  font-size: 30px;
+  line-height: 75px
 }
 
 div.create-navbar {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   font-size: 30px;
   color: #C3C3E5;
   bottom: 0;
   left: 0;
   width: 100%;
-  background: #8C489F
+  background: #8C489F;
+  height: 54px;
 }
 
 div.create-navbar > div:hover {
@@ -52,18 +54,25 @@ div.create-navbar > div:hover {
   background: #443266;
 }
 
+.nav-clicked {
+  color: #C3C3E5;
+  background: #443266;
+}
+
 div.create-navbar > div {
   padding: 0 15px;
 }
 
-@media (min-width: 700px) {
+@media (min-width: 375px) {
   body {
     display: flex;
     justify-content: center
 
   }
   div#content {
-    width: 700px
+    width: 375px;
+    height: 667px;
+    margin: auto;
   }
 }
 
@@ -115,13 +124,14 @@ div.canvas-container {
 
 
 div.react-color-picker__hue-spectrum {
-  height: 300px;
+  height: 0px;
   width: 30px;
   position: absolute;
   border-radius: 5px;
   z-index: 1;
   margin-left: 10px;
-  margin-top: 10px;
+  margin-top: 50px;
+  transform: height 1000ms;
 }
 
 div.react-color-picker__hue-spectrum .react-color-picker__hue-drag {
@@ -133,8 +143,12 @@ div.color-box {
   position: absolute;
   z-index: 1;
   color: #C3C3E5;
-  margin-left: 50px;
+  margin-left: 10px;
   margin-top: 10px;
+}
+
+div.color-box:hover {
+  cursor: pointer;
 }
 
 #pen {
@@ -164,6 +178,11 @@ margin-top: 10px;
 margin-right: 10px
 }
 
+div.clear-canvas:hover {
+  cursor: pointer;
+  color: #C3C3E5
+}
+
 div.save-card {
   width: 30px;
   height: 30px;
@@ -172,18 +191,23 @@ div.save-card {
   position: absolute;
   right: 0;
   bottom: 0;
-  background: #443266;
-  color: #C3C3E5;
-  font-size: 24px;
+  color: lightgreen;
+  font-size: 30px;
   text-align: center;
   line-height: 30px;
   margin-bottom: 15px;
   margin-right: 10px
 }
 
+div.save-card:hover {
+  cursor: pointer;
+  color: green;
+}
+
 canvas {
-  border: 4px solid #C3C3E5;
-  border-radius: 10px;
+  box-sizing: border-box;
+  border: 1px solid #C3C3E5;
+  margin-top: 3px
 }
 
 canvas:hover {
@@ -192,15 +216,17 @@ canvas:hover {
 
 div.tiles-container {
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-start;
   flex-wrap: wrap;
+  width: 100%;
+  height: 100%
 }
 
 img.tile-board-image {
-  width: 200px;
-  height: 300px;
+  width: 95px;
+  height: 150px;
   border: 2px solid #C3C3E5;
-  margin: 10px;
+  margin: 13px;
   border-radius: 5px;
 }
 
@@ -256,3 +282,60 @@ div.story-show-container > h3 {
   color: #443266;
   text-align: center;
 }
+
+#stroke-size {
+  position: absolute;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: #443266;
+}
+
+#stroke-size > i:hover {
+  cursor: pointer;
+  color: #C3C3E5
+}
+
+.hidden {
+  display: none;
+}
+
+#stroke-width {
+  position: absolute;
+  margin-top: 10px;
+  background: transparent;
+  margin-bottom: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: #443266
+}
+
+#stroke-width > div > i:hover {
+  cursor: pointer;
+  color: #C3C3E5
+}
+
+div.nav-button {
+  padding: 0 15px;
+  margin: 0;
+}
+
+div.nav-button > h3 {
+  font-size: 20px;
+  vertical-align: center;
+  vertical-align: middle;
+  line-height: 54px;
+  padding: 0;
+  margin: 0;
+}
+
+.md-18 { font-size: 18px !important; }
+.md-24 { font-size: 24px !important; }
+.md-36 { font-size: 36px !important;}
+.md-48 { font-size: 48px !important;}

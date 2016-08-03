@@ -21,7 +21,7 @@ module.exports = React.createClass({
   render: function () {
     let display;
     if (this.state.story === null) {
-      display = <h3>No Gif</h3>
+      display = <h3>Building .gif...</h3>
     } else {
       display = <img className="gif-display" src={this.state.story.gif} />
     }

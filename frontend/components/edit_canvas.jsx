@@ -14,11 +14,15 @@ var canvas, ctx, flag = false,
         dot_flag = false;
 
     var x = "red",
-        y = 4;
+        y = 8;
 
     function init() {
       canvas = document.getElementById('canvas');
+      canvas.width = $(".edit-canvas-container").first().width() - 2;
+      canvas.height = $(".edit-canvas-container").first().height() - 2;
       ctx = canvas.getContext("2d");
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
       rect = canvas.getBoundingClientRect();
       w = canvas.width;
       h = canvas.height;
@@ -26,7 +30,6 @@ var canvas, ctx, flag = false,
       ctx.rect(0, 0, w, h);
       ctx.fillStyle = "white";
       ctx.fill();
-
 
         canvas.addEventListener("mousemove", function (e) {
             findxy('move', e)
@@ -104,14 +107,11 @@ module.exports = React.createClass({
 
   componentDidMount: function() {
     init();
+    restorePoints = [];
+    $(".react-color-picker__hue-spectrum").first().css('height', '0px');
   },
 
   clearCanvas: function() {
-    // ctx.clearRect(0, 0, w, h);
-    // ctx.beginPath();
-    // ctx.rect(0, 0, w, h);
-    // ctx.fillStyle = "white";
-    // ctx.fill();
     if (restorePoints.length > 1) {
       let oImg = new Image();
       restorePoints.pop();
@@ -126,29 +126,46 @@ module.exports = React.createClass({
     }
   },
 
-  // setColor: function () {
-  //   var color = Colr.fromRgb(
-  //     Math.random() * 255,
-  //     Math.random() * 255,
-  //     Math.random() * 255
-  //   );
-  //
-  //   // replace current color and origin color
-  //   this.setState({
-  //     color: color.toHex()
-  //   });
-  // },
-  //
-  // handleChange: function (color) {
-  //   this.setState({
-  //     color: color.toHex()
-  //   });
-  // },
+  updateWidth: function (val) {
+    if (val === 8) {
+      $("#stroke-width").toggleClass('hidden');
+      $("#stroke-size").children().removeClass();
+      $("#stroke-size").removeClass();
+      $("#stroke-size").children().addClass('material-icons md-18');
+      y = 8;
+    }
 
-  onDrag(color, c) {
+    if (val === 12) {
+      $("#stroke-width").toggleClass('hidden');
+      $("#stroke-size").removeClass();
+      $("#stroke-size").children().removeClass();
+      $("#stroke-size").children().addClass('material-icons md-24');
+      y = 12;
+    }
+
+    if (val === 16) {
+      $("#stroke-width").toggleClass('hidden');
+      $("#stroke-size").removeClass();
+      $("#stroke-size").children().removeClass();
+      $("#stroke-size").children().addClass('material-icons md-36');
+      y = 16;
+    }
+  },
+
+  showStrokeOptions: function () {
+    $("#stroke-size").addClass('hidden');
+    $("#stroke-width").removeClass('hidden');
+  },
+
+  onDrag: function (color, c) {
     this.setState({color: color});
     console.log(this.state.color);
     x = color
+    $(".react-color-picker__hue-spectrum").first().css('height', '0px');
+  },
+
+  showHue: function () {
+    $(".react-color-picker__hue-spectrum").first().css('height', "300px");
   },
 
   submit: function() {
@@ -160,22 +177,30 @@ module.exports = React.createClass({
     ctx.rect(0, 0, w, h);
     ctx.fillStyle = "white";
     ctx.fill();
+    restorePoints = [];
   },
+
 
   render: function() {
     return (
       <div className="edit-canvas-container">
         <div className="canvas-container">
-          <HueSpectrum className="hue-spec" value={this.state.color} onDrag={this.onDrag}/>
-            <div className="color-box" style={{
+          <HueSpectrum id="hue" className="hue-spec" value={this.state.color} onDrag={this.onDrag}/>
+            <div onClick={this.showHue} className="color-box" style={{
             background: this.state.color,
             width: 30,
             height: 30,
             color: '#C3C3E5'
           }}><i id="pen" className="material-icons">create</i></div>
-        <div onClick={this.clearCanvas}className="clear-canvas">x</div>
-            <canvas id="canvas" width="500" height="500"></canvas>
-            <div onClick={this.submit} className="save-card">+</div>
+        <div onClick={this.showStrokeOptions} id="stroke-size" className=""><i className="material-icons md-18">radio_button_checked</i></div>
+          <div id="stroke-width" className="hidden">
+            <div onClick={() => this.updateWidth(8)}><i className="material-icons md-18">radio_button_checked</i></div>
+            <div onClick={() => this.updateWidth(12)}><i className="material-icons md-24">radio_button_checked</i></div>
+            <div onClick={() => this.updateWidth(16)}><i className="material-icons md-36">radio_button_checked</i></div>
+          </div>
+          <div onClick={this.clearCanvas}className="clear-canvas"><i className="material-icons">undo</i></div>
+            <canvas id="canvas" ></canvas>
+            <div onClick={this.submit} className="save-card"><i className="material-icons">check_circle</i></div>
           </div>
       </div>
     );
