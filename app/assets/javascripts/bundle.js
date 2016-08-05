@@ -33978,6 +33978,7 @@
 	        null,
 	        'StoryMaker allows you to draw cards, save them as .gif files, and then share with friends.'
 	      ),
+	      React.createElement('img', { id: 'demo-img', src: 'http://res.cloudinary.com/cassbaltz/image/upload/v1470432252/MichStar/StoryMakerDemo_t2gag3.gif' }),
 	      React.createElement(
 	        'h3',
 	        { className: 'home-link', onClick: this.sendToCreate },
