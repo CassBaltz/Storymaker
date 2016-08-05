@@ -10,4 +10,4 @@ Right now, the basics of GIF creation are available and working. During the crea
 
 ## Demo
 
-![alt text](http://res.cloudinary.com/cassbaltz/image/upload/v1470432252/MichStar/StoryMakerDemo_t2gag3.gif)
+(http://res.cloudinary.com/cassbaltz/image/upload/v1470432252/MichStar/StoryMakerDemo_t2gag3.gif)
